@@ -1,0 +1,17 @@
+{
+  "inbox_id": 42,
+  "enabled": true,
+  "language": "pt_BR",
+  "preview_delay_seconds": 10,
+  "persona": "You are a helpful customer service assistant for a Brazilian company. You speak Portuguese naturally and are knowledgeable about Brazilian business practices. Always be polite, professional, and empathetic.",
+  "rag": {
+    "top_k": 3,
+    "time_window_days": 30
+  },
+  "sheets_tool": {
+    "sheet_configs": ["service_orders", "appointments"]
+  },
+  "multimodal": {
+    "image_ocr": true
+  }
+}

@@ -1,0 +1,9 @@
+appointment_id,customer_name,customer_phone,service_type,appointment_date,appointment_time,status,technician,notes
+APT-001,João Silva,+5541999990001,Instalação WiFi,2025-08-15,14:00,Confirmado,Técnico A,Levar roteador e cabos
+APT-002,Pedro Oliveira,+5541999990003,Instalação Câmeras,2025-08-20,09:00,Agendado,Técnico B,Vistoria prévia necessária
+APT-003,Carlos Ferreira,+5541999990005,Instalação Fibra,2025-08-25,10:00,Pendente,Técnico C,Aguardar liberação da obra
+APT-004,Fernanda Rocha,+5541999990008,Instalação Smart TV,2025-08-18,16:00,Confirmado,Técnico A,Cliente estará presente
+APT-005,Roberto Lima,+5541999990007,Upgrade Plano,2025-08-16,11:00,Confirmado,Técnico D,Troca de equipamento
+APT-006,Ana Costa,+5541999990004,Suporte Técnico,2025-08-14,15:30,Em atendimento,Técnico B,Atendimento remoto
+APT-007,Juliana Souza,+5541999990010,Consultoria TI,2025-08-22,08:00,Agendado,Especialista TI,Reunião de planejamento
+APT-008,Maria Santos,+5541999990002,Visita Técnica,2025-08-17,13:00,Confirmado,Técnico C,Avaliação pós-instalação

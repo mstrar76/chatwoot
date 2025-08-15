@@ -1,3 +1,8 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This will be a fork of CHATWOOT, look on 
+
 # Chatwoot Development Guidelines
 
 ## Build / Test / Lint
@@ -56,3 +61,103 @@
 ## Ruby Best Practices
 
 - Use compact `module/class` definitions; avoid nested styles
+
+## Architecture Overview
+
+Chatwoot is a full-stack Rails 7.1 application with Vue 3 frontend built using Vite. The architecture supports multi-tenancy through accounts and includes enterprise features.
+
+### Tech Stack
+
+- **Backend**: Ruby 3.4.4, Rails 7.1, PostgreSQL, Redis, Sidekiq
+- **Frontend**: Vue 3 (Composition API), Vite 5, Tailwind CSS, Vuex 4
+- **Real-time**: ActionCable (WebSockets), Wisper (pub/sub)
+- **Background Jobs**: Sidekiq with Redis
+- **Testing**: RSpec (Ruby), Vitest (JS/Vue)
+- **Deployment**: Docker, Heroku, DigitalOcean supported
+
+### Application Structure
+
+```
+app/
+├── controllers/           # API and web controllers
+│   ├── api/v1/           # REST API endpoints (JSON)
+│   ├── super_admin/      # Admin interface controllers  
+│   └── webhooks/         # External webhook handlers
+├── javascript/           # Frontend Vue.js applications
+│   ├── dashboard/        # Main admin dashboard (Vue 3)
+│   ├── widget/           # Customer-facing chat widget
+│   ├── portal/           # Help center/knowledge base
+│   ├── v3/              # New v3 interface components
+│   └── shared/           # Shared components across apps
+├── models/               # ActiveRecord models and concerns
+├── services/             # Business logic layer
+├── jobs/                 # Sidekiq background jobs
+├── listeners/            # Event handlers (Wisper)
+├── policies/             # Authorization (Pundit)
+├── channels/             # ActionCable WebSocket channels
+└── views/                # Jbuilder JSON templates
+```
+
+### Key Models & Relationships
+
+- **Account** → **Users** (multi-tenant structure)
+- **Account** → **Inboxes** → **Conversations** → **Messages**
+- **Contact** ↔ **ContactInbox** ↔ **Inbox** (many-to-many)
+- **Conversation** → **ConversationParticipant** (agents assigned)
+- **Channel** types: WebWidget, Email, WhatsApp, Facebook, etc.
+- **Enterprise**: Captain AI, SLA policies, custom roles, audit logs
+
+### Communication Channels
+
+Supported via polymorphic `Channel` association on `Inbox`:
+- Web Widget (`Channel::WebWidget`)
+- Email (`Channel::Email`) 
+- WhatsApp (`Channel::Whatsapp`)
+- Facebook (`Channel::FacebookPage`)
+- Instagram (`Channel::Instagram`)
+- Telegram (`Channel::Telegram`)
+- Twitter (`Channel::TwitterProfile`)
+- SMS/Twilio (`Channel::TwilioSms`)
+
+### Frontend Applications
+
+1. **Dashboard** (`/app/javascript/dashboard/`): Main agent interface
+2. **Widget** (`/app/javascript/widget/`): Customer chat widget
+3. **Portal** (`/app/javascript/portal/`): Knowledge base frontend
+4. **V3** (`/app/javascript/v3/`): New interface components
+
+### Enterprise Features (`enterprise/`)
+
+- **Captain AI**: AI assistant with document indexing and responses
+- **SLA Policies**: Service level agreements and tracking
+- **Custom Roles**: Role-based permissions beyond default roles
+- **Audit Logs**: Comprehensive activity tracking
+- **Advanced Reporting**: Enhanced analytics and metrics
+
+### Event System
+
+Uses Wisper pub/sub pattern:
+- Models publish events (conversation created, message sent, etc.)
+- Listeners handle events (notifications, webhooks, reporting)
+- Located in `app/listeners/`
+
+### API Design
+
+- RESTful API at `/api/v1/`
+- Account-scoped resources: `/api/v1/accounts/:account_id/...`
+- JSON responses using Jbuilder templates
+- Authentication via Devise Token Auth
+- Authorization via Pundit policies
+
+### Background Processing
+
+- **Sidekiq** for async jobs with Redis
+- Job categories: webhooks, notifications, integrations, email processing
+- Scheduled via `sidekiq-cron` (see `config/schedule.yml`)
+
+### Database & Search
+
+- **PostgreSQL** primary database with JSONB for flexible schemas
+- **pg_search** for full-text search on articles
+- **pgvector** + **neighbor** gem for AI embeddings (Captain feature)
+- Database triggers via **hairtrigger** for complex logic

@@ -1,0 +1,11 @@
+order_id,customer_name,customer_phone,service_type,status,price_brl,created_date,estimated_completion,notes
+SO-001,João Silva,+5541999990001,Instalação WiFi,Em andamento,250.00,2025-08-10,2025-08-15,Instalação residencial - apartamento
+SO-002,Maria Santos,+5541999990002,Manutenção Roteador,Concluído,150.00,2025-08-12,2025-08-12,Problema de conectividade resolvido
+SO-003,Pedro Oliveira,+5541999990003,Instalação Câmeras,Agendado,850.00,2025-08-14,2025-08-20,Sistema de 4 câmeras - casa
+SO-004,Ana Costa,+5541999990004,Suporte Técnico,Em andamento,100.00,2025-08-14,2025-08-14,Configuração de rede doméstica
+SO-005,Carlos Ferreira,+5541999990005,Instalação Fibra,Aguardando,400.00,2025-08-15,2025-08-25,Instalação fibra óptica 200MB
+SO-006,Lucia Pereira,+5541999990006,Manutenção Preventiva,Concluído,120.00,2025-08-13,2025-08-13,Limpeza e verificação equipamentos
+SO-007,Roberto Lima,+5541999990007,Upgrade Plano,Em andamento,300.00,2025-08-14,2025-08-16,Upgrade para plano 500MB
+SO-008,Fernanda Rocha,+5541999990008,Instalação Smart TV,Agendado,200.00,2025-08-16,2025-08-18,Configuração aplicativos streaming
+SO-009,Marcos Alves,+5541999990009,Reparo Cabo,Concluído,80.00,2025-08-11,2025-08-11,Cabo danificado substituído
+SO-010,Juliana Souza,+5541999990010,Consultoria TI,Em andamento,500.00,2025-08-15,2025-08-22,Projeto rede empresarial

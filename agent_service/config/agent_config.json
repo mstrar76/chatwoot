@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "llm_provider": "openai",
+  "model": "gpt-4o",
+  "max_tokens": 1024,
+  "temperature": 0.3,
+  "preview_delay_seconds": 15,
+  "rag": {
+    "enabled": true,
+    "embedding_model": "text-embedding-3-small",
+    "top_k": 4,
+    "time_window_days": 90,
+    "vector_table": "public.embeddings",
+    "similarity_threshold": 0.7
+  },
+  "sheets_tool": {
+    "enabled": true,
+    "sheet_configs": ["service_orders"],
+    "cache_ttl_minutes": 5,
+    "csv_path": "/app/config/data/service_orders.csv"
+  },
+  "multimodal": {
+    "audio_transcripts": true,
+    "image_ocr": false,
+    "max_file_size_mb": 10
+  },
+  "cost_limits": {
+    "daily_budget_usd": 50.0,
+    "monthly_budget_usd": 1000.0,
+    "per_message_max_tokens": 2000,
+    "alert_threshold_percent": 80.0
+  },
+  "log_level": "info"
+}

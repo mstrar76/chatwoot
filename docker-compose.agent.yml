@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  omnineural_agent:
+    container_name: omnineural_agent
+    build:
+      context: ./agent_service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    networks:
+      - omnineural-network
+    environment:
+      # Database Configuration
+      - DATABASE_URL=postgres://omniadmin:omni4518pgdb@omnineural_postgres:5432/omnicore
+      - PGVECTOR_DATABASE_URL=postgres://omniadmin:omni4518pgdb@omnineural_postgres:5432/omnicore
+      
+      # Chatwoot Integration
+      - CHATWOOT_API_URL=http://omnineural_chatwoot:3000
+      - CHATWOOT_API_TOKEN=${CHATWOOT_API_TOKEN}
+      - CHATWOOT_WEBHOOK_SECRET=${CHATWOOT_WEBHOOK_SECRET:-}
+      
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4o
+      - OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+      
+      # Redis Configuration (for caching and rate limiting)
+      - REDIS_URL=redis://default:omni4518redis@redis-stack:6379
+      
+      # Agent Configuration
+      - AGENT_CONFIG_PATH=/app/config/agent_config.json
+      - LOG_LEVEL=info
+      - ENVIRONMENT=production
+      
+      # Security and Performance
+      - MAX_CONCURRENT_REQUESTS=10
+      - REQUEST_TIMEOUT_SECONDS=30
+      - WEBHOOK_SIGNATURE_VERIFICATION=true
+      
+      # Cost Controls
+      - DAILY_BUDGET_USD=50.0
+      - MONTHLY_BUDGET_USD=1000.0
+      - ALERT_THRESHOLD_PERCENT=80.0
+    
+    volumes:
+      # Configuration files
+      - ./agent_service/config:/app/config:ro
+      # CSV data files for spreadsheet tool
+      - ./agent_service/data:/app/config/data:ro
+      # Logs directory
+      - ./agent_service/logs:/app/logs
+    
+    depends_on:
+      - omnineural_postgres
+      - omnineural_chatwoot
+      - redis-stack
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agent.rule=Host(`agent.omnineural.com.br`)"
+      - "traefik.http.routers.agent.tls=true"
+      - "traefik.http.routers.agent.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.agent.loadbalancer.server.port=8082"
+
+networks:
+  omnineural-network:
+    external: true
+
+# Optional: Agent-specific volumes for persistent data
+volumes:
+  agent_logs:
+    driver: local
+  agent_cache:
+    driver: local
